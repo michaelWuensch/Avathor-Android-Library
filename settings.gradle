@@ -1,0 +1,3 @@
+include ':AvathorLibrary'
+include ':app'
+rootProject.name = "Avathor"
