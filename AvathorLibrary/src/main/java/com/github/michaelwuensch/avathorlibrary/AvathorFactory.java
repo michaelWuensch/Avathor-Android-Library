@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class AvathorFactory {
 
-    public static Bitmap getAvathor(Context context, String input){
+    public static Bitmap getAvathor(Context context, String input) {
         input = input.toLowerCase();
         byte[] hash = Utils.sha256Hash(input);
         ArrayList<Bitmap> bitmaps = new ArrayList<>();
@@ -35,18 +35,18 @@ public class AvathorFactory {
 
     private static String getBackgroundPath(Context context, byte[] hash) {
         AssetManager assetManager = context.getAssets();
-        String backgroundsDirectory = "images/backgrounds/";
+        String backgroundsDirectory = "images/backgrounds";
 
         try {
             String[] bgSets = assetManager.list(backgroundsDirectory);
             int setIndex = (hash[0] & 0xff);
             int finalSetIndex = setIndex % bgSets.length;
 
-            String[] backgrounds = assetManager.list(backgroundsDirectory + bgSets[finalSetIndex] + "/");
+            String[] backgrounds = assetManager.list(backgroundsDirectory + "/" + bgSets[finalSetIndex]);
             int backgroundIndex = (hash[1] & 0xff);
             int finalBackgroundIndex = backgroundIndex % backgrounds.length;
 
-            return backgroundsDirectory + bgSets[finalSetIndex] + "/" + backgrounds[finalBackgroundIndex];
+            return backgroundsDirectory + "/" + bgSets[finalSetIndex] + "/" + backgrounds[finalBackgroundIndex];
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,18 +56,18 @@ public class AvathorFactory {
 
     private static String getSubsetPath(Context context, byte[] hash) {
         AssetManager assetManager = context.getAssets();
-        String setsDirectory = "images/sets/";
+        String setsDirectory = "images/sets";
 
         try {
             String[] sets = assetManager.list(setsDirectory);
             int setIndex = (hash[2] & 0xff);
             int finalSetIndex = setIndex % sets.length;
 
-            String[] subsets = assetManager.list(setsDirectory + sets[finalSetIndex] + "/");
+            String[] subsets = assetManager.list(setsDirectory + "/" + sets[finalSetIndex]);
             int subsetIndex = (hash[3] & 0xff);
             int finalSubsetIndex = subsetIndex % subsets.length;
 
-            return setsDirectory + sets[finalSetIndex] + "/" + subsets[finalSubsetIndex] + "/";
+            return setsDirectory + "/" + sets[finalSetIndex] + "/" + subsets[finalSubsetIndex];
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -84,10 +84,10 @@ public class AvathorFactory {
             String[] componentCategories = assetManager.list(subSetPath);
             componentPaths = new String[componentCategories.length];
             for (int i = 0; i < Math.min(componentCategories.length, 13); i++) {
-                String[] components = assetManager.list(subSetPath + componentCategories[i] + "/");
+                String[] components = assetManager.list(subSetPath + "/" + componentCategories[i]);
                 int componentIndex = ((hash[4 + i * 2] & 0xff) << 8) | (hash[4 + i * 2 + 1] & 0xff);
                 int finalComponentIndex = componentIndex % components.length;
-                componentPaths[i] = subSetPath + componentCategories[i] + "/" + components[finalComponentIndex];
+                componentPaths[i] = subSetPath + "/" + componentCategories[i] + "/" + components[finalComponentIndex];
             }
         } catch (IOException e) {
             e.printStackTrace();
