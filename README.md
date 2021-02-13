@@ -1,5 +1,5 @@
 # Avathor-Android-Library
-Avatar images for the bitcoin lightning network!
+Avatar images for the Bitcoin Lightning network!
 
 This is an implementation of the [Avathor specification](https://github.com/michaelWuensch/avathor-rfc) for android.
 
@@ -19,7 +19,7 @@ Add the following dependency to your build.gradle file.
 
 ```
 dependencies {
-	implementation 'com.github.michaelWuensch:avathor-android-library:1.0.0'
+	implementation 'com.github.michaelWuensch:avathor-android-library:1.1.0'
 }
 ```
 
