@@ -22,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
         mAvathorImage = findViewById(R.id.testImage);
 
-        randomAvathor();
+        // Display test vector image as initial image
+        mAvathorImage.setImageBitmap(AvathorFactory.getAvathor(MainActivity.this, "02ef2da605f5e9cc3f6a042f3258e7eec3ea442aadc4299ced0f8ec06d444ad8b8"));
 
         Button randomizeButton = findViewById(R.id.button);
         randomizeButton.setOnClickListener(new View.OnClickListener() {
