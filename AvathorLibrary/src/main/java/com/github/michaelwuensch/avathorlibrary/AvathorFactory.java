@@ -9,12 +9,12 @@ import java.util.ArrayList;
 
 public class AvathorFactory {
 
-    public static Bitmap getAvathor(Context context, String input) {
+    public static Bitmap getAvathor(Context context, String input, AvatarSet set) {
         input = input.toLowerCase();
         byte[] hash = Utils.sha256Hash(input);
         ArrayList<Bitmap> bitmaps = new ArrayList<>();
 
-        String[] bitmapPaths = getBitmapPaths(context, hash);
+        String[] bitmapPaths = getBitmapPaths(context, hash, set);
 
         for (String bitmapPath : bitmapPaths) {
             bitmaps.add(Utils.getBitmapFromAsset(context, bitmapPath));
@@ -23,8 +23,8 @@ public class AvathorFactory {
         return Utils.combineBitmaps(bitmaps);
     }
 
-    private static String[] getBitmapPaths(Context context, byte[] hash) {
-        String subsetPath = getSubsetPath(context, hash);
+    private static String[] getBitmapPaths(Context context, byte[] hash, AvatarSet set) {
+        String subsetPath = getSubsetPath(context, hash, set);
         String[] componentPaths = getComponentPaths(context, hash, subsetPath);
         String[] result = new String[componentPaths.length + 1];
         result[0] = getBackgroundPath(context, hash);
@@ -54,20 +54,37 @@ public class AvathorFactory {
         return "";
     }
 
-    private static String getSubsetPath(Context context, byte[] hash) {
+    private static String getSubsetPath(Context context, byte[] hash, AvatarSet set) {
         AssetManager assetManager = context.getAssets();
         String setsDirectory = "images/sets";
-
         try {
-            String[] sets = assetManager.list(setsDirectory);
-            int setIndex = (hash[2] & 0xff);
-            int finalSetIndex = setIndex % sets.length;
+            String setDirectory = "";
+            switch (set) {
+                case MIXED:
+                    String[] sets = assetManager.list(setsDirectory);
+                    int setIndex = (hash[2] & 0xff);
+                    int finalSetIndex = setIndex % sets.length;
+                    setDirectory = setsDirectory + "/" + sets[finalSetIndex];
+                    break;
+                case ROBOTS:
+                    setDirectory = setsDirectory + "/robots";
+                    break;
+                case ALIENS:
+                    setDirectory = setsDirectory + "/aliens";
+                    break;
+                case HUMANS:
+                    setDirectory = setsDirectory + "/humans";
+                    break;
+                case ANIMALS:
+                    setDirectory = setsDirectory + "/animals";
+                    break;
+            }
 
-            String[] subsets = assetManager.list(setsDirectory + "/" + sets[finalSetIndex]);
+            String[] subsets = assetManager.list(setDirectory);
             int subsetIndex = (hash[3] & 0xff);
             int finalSubsetIndex = subsetIndex % subsets.length;
 
-            return setsDirectory + "/" + sets[finalSetIndex] + "/" + subsets[finalSubsetIndex];
+            return setDirectory + "/" + subsets[finalSubsetIndex];
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -94,5 +111,13 @@ public class AvathorFactory {
         }
 
         return componentPaths;
+    }
+
+    public enum AvatarSet {
+        MIXED,
+        ROBOTS,
+        HUMANS,
+        ALIENS,
+        ANIMALS;
     }
 }

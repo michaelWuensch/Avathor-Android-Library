@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         mAvathorImage = findViewById(R.id.testImage);
 
         // Display test vector image as initial image
-        mAvathorImage.setImageBitmap(AvathorFactory.getAvathor(MainActivity.this, "02ef2da605f5e9cc3f6a042f3258e7eec3ea442aadc4299ced0f8ec06d444ad8b8"));
+        mAvathorImage.setImageBitmap(AvathorFactory.getAvathor(MainActivity.this, "02ef2da605f5e9cc3f6a042f3258e7eec3ea442aadc4299ced0f8ec06d444ad8b8", AvathorFactory.AvatarSet.MIXED));
 
         Button randomizeButton = findViewById(R.id.button);
         randomizeButton.setOnClickListener(new View.OnClickListener() {
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         Random rd = new Random();
         byte[] randomBytes = new byte[32];
         rd.nextBytes(randomBytes);
-        mAvathorImage.setImageBitmap(AvathorFactory.getAvathor(MainActivity.this, bytesToHex(randomBytes)));
+        mAvathorImage.setImageBitmap(AvathorFactory.getAvathor(MainActivity.this, bytesToHex(randomBytes), AvathorFactory.AvatarSet.MIXED));
     }
 
     public static String bytesToHex(byte[] bytes) {
